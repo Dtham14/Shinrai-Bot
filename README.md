@@ -1,3 +1,2 @@
-# Shinrai-Discord-Bot
-
-Discord bot for managing guild wars for Epic Seven.  
+# Shinrai Discord Bot
+ A discord bot for my guild server.  
