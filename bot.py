@@ -94,7 +94,7 @@ async def subcommand(ctx):
                         colour = 0xFF0000
                     )
                     .set_thumbnail("https://gamepress.gg/epicseven/sites/epicseven/files/2020-12/c1104_su.png")
-                    .add_field('Finishing Callout', f"{ctx.options.ign.lower()} is already being scouted by {user.mention}!")
+                    .add_field('Scouting Callout', '**'f"{ctx.options.ign.lower()}** is already being scouted by {user.mention}!")
 
                 )
                 await ctx.respond(embed)
@@ -110,7 +110,7 @@ async def subcommand(ctx):
             colour = 0x00FF00
         )
         .set_thumbnail("https://gamepress.gg/epicseven/sites/epicseven/files/2020-12/c1104_su.png")
-        .add_field('Scouting Callout', f"{ctx.options.ign.lower()} is being scouted by {user.mention}!")
+        .add_field('Scouting Callout', '**'f"{ctx.options.ign.lower()}** is being scouted by {user.mention}!")
 
     )
     await ctx.respond(embed)
@@ -118,7 +118,7 @@ async def subcommand(ctx):
 # finishes
 @my_group.child
 @lightbulb.option('ign', 'IGN', type = str)
-@lightbulb.command('finish', 'finshing!')
+@lightbulb.command('finish', 'finishing a tower')
 @lightbulb.implements(lightbulb.SlashSubCommand)
 async def subcommand(ctx):
     
@@ -134,7 +134,7 @@ async def subcommand(ctx):
                         colour = 0xFF0000
                     )
                     .set_thumbnail("https://gamepress.gg/epicseven/sites/epicseven/files/2020-12/c1104_su.png")
-                    .add_field('Finishing Callout', f"{ctx.options.ign.lower()} is already being finished by {user.mention}!")
+                    .add_field('Finishing Callout', '**'f"{ctx.options.ign.lower()}** is already being finished by {user.mention}!")
 
                 )
                 await ctx.respond(embed)
@@ -150,7 +150,7 @@ async def subcommand(ctx):
             colour = 0x00FF00
         )
         .set_thumbnail("https://gamepress.gg/epicseven/sites/epicseven/files/2020-12/c1104_su.png")
-        .add_field('Finishing Callout', f"{ctx.options.ign.lower()} is being finished by {user.mention}!")
+        .add_field('Finishing Callout', '**'f"{ctx.options.ign.lower()}** is being finished by {user.mention}!")
 
     )
     await ctx.respond(embed)
@@ -162,12 +162,16 @@ async def subcommand(ctx):
 @lightbulb.implements(lightbulb.SlashSubCommand)
 async def subcommand(ctx):
     
-    for i in range(len(scouts)):
-        for j in range(len(scouts[i])):
-            if scouts[i][j] == ctx.options.ign.lower():
+    for i in range(len(finishes)):
+        for j in range(len(finishes[i])):
+            if finishes[i][j] == ctx.options.ign.lower():
                 
-                user = scouts[i][j+1]
-                scouts.remove(scouts[i])
+                # acts like pop()
+                max_size = len(finishes)
+                last_index_finish = max_size -1
+                
+                user = finishes[i][j+1]
+                finishes.remove(finishes[last_index_finish])
                 
                 embed = (
                     hikari.Embed(
@@ -175,31 +179,36 @@ async def subcommand(ctx):
                         colour = 0xFFFF00
                     )
                     .set_thumbnail("https://gamepress.gg/epicseven/sites/epicseven/files/2020-12/c1104_su.png")
-                    .add_field('Scouting Callout', f"{ctx.options.ign.lower()} has been unscouted by {user.mention}!")
+                    .add_field('Finishing Callout', '**'f"{ctx.options.ign.lower()}** still needs to be finished! {user.mention} will attack something else.")
+
+                )
+                await ctx.respond(embed)
+                return
+    
+    for i in range(len(scouts)):
+        for j in range(len(scouts[i])):
+            if scouts[i][j] == ctx.options.ign.lower():
+                
+                # acts like pop()
+                max_size = len(scouts)
+                last_index_scout = max_size -1
+                
+                user = scouts[i][j+1]
+                scouts.remove(scouts[last_index_scout])
+                
+                embed = (
+                    hikari.Embed(
+                        title = 'Shinrai Callouts',
+                        colour = 0xFFFF00
+                    )
+                    .set_thumbnail("https://gamepress.gg/epicseven/sites/epicseven/files/2020-12/c1104_su.png")
+                    .add_field('Scouting Callout', '**'f"{ctx.options.ign.lower()}** has been unscouted by {user.mention}!")
 
                 )
                 await ctx.respond(embed)
                 return
             
-    for i in range(len(finishes)):
-        for j in range(len(finishes[i])):
-            if finishes[i][j] == ctx.options.ign.lower():
-                
-                
-                user = finishes[i][j+1]
-                finishes.remove(finishes[i])
-                
-                embed = (
-                    hikari.Embed(
-                        title = 'Shinrai Callouts',
-                        colour = 0xFFFF00
-                    )
-                    .set_thumbnail("https://gamepress.gg/epicseven/sites/epicseven/files/2020-12/c1104_su.png")
-                    .add_field('Finishing Callout', f"{ctx.options.ign.lower()} still needs to be finished!")
-
-                )
-                await ctx.respond(embed)
-                return
+    
     
     # if someone typed without prior scout or finish        
     embed = (
@@ -213,6 +222,48 @@ async def subcommand(ctx):
     )
     await ctx.respond(embed)
     return
+
+# scouting/intel 
+@my_group.child
+@lightbulb.option('t2_hero3_spd_set_other', 'hero spd + set + other comments', type = str)
+@lightbulb.option('t2_hero3_hp', 'hero hp', type = str)
+@lightbulb.option('t2_hero3_arti', 'hero arti', type = str)
+@lightbulb.option('t2_hero3', 'hero name', type = str)
+@lightbulb.option('t2_hero2_spd_set_other', 'hero spd + set + other comments', type = str)
+@lightbulb.option('t2_hero2_hp', 'hero hp', type = str)
+@lightbulb.option('t2_hero2_arti', 'hero arti', type = str)
+@lightbulb.option('t2_hero2', 'hero name', type = str)
+@lightbulb.option('t2_hero1_spd_set_other', 'hero spd + set + other comments', type = str)
+@lightbulb.option('t2_hero1_hp', 'hero hp', type = str)
+@lightbulb.option('t2_hero1_arti', 'hero arti', type = str)
+@lightbulb.option('t2_hero1', 'hero name', type = str)
+@lightbulb.option('t1_hero3_spd_set_other', 'hero spd + set + other comments', type = str)
+@lightbulb.option('t1_hero3_hp', 'hero hp', type = str)
+@lightbulb.option('t1_hero3_arti', 'hero arti', type = str)
+@lightbulb.option('t1_hero3', 'hero name', type = str)
+@lightbulb.option('t1_hero2_spd_set_other', 'hero spd + set + other comments', type = str)
+@lightbulb.option('t1_hero2_hp', 'hero hp', type = str)
+@lightbulb.option('t1_hero2_arti', 'hero arti', type = str)
+@lightbulb.option('t1_hero2', 'hero name', type = str)
+@lightbulb.option('t1_hero1_spd_set_other', 'hero spd + set + other comments', type = str)
+@lightbulb.option('t1_hero1_hp', 'hero hp', type = str)
+@lightbulb.option('t1_hero1_arti', 'hero arti', type = str)
+@lightbulb.option('t1_hero1', 'hero name', type = str)
+@lightbulb.option('ign', 'IGN', type = str)
+@lightbulb.command('intel', 'Put intel for towers/fort/sh you hit. Put CR screenshots below. Put ? for unknown fields')
+@lightbulb.implements(lightbulb.SlashSubCommand)
+async def subcommand(ctx):
+    embed = (
+        hikari.Embed(
+            title = f'{ctx.options.ign.lower()}',
+            colour = 0x00FF00
+        )
+        .set_thumbnail("https://gamepress.gg/epicseven/sites/epicseven/files/2020-12/c1104_su.png")
+        .add_field('Team 1', f'{ctx.options.t1_hero1} | {ctx.options.t1_hero1_arti} | {ctx.options.t1_hero1_hp} hp | {ctx.options.t1_hero1_spd_set_other} \n {ctx.options.t1_hero2} | {ctx.options.t1_hero2_arti} | {ctx.options.t1_hero2_hp} hp | {ctx.options.t1_hero2_spd_set_other} \n {ctx.options.t1_hero3} | {ctx.options.t1_hero3_arti} | {ctx.options.t1_hero3_hp} hp | {ctx.options.t1_hero3_spd_set_other} ')
+        .add_field('Team 2', f'{ctx.options.t2_hero1} | {ctx.options.t2_hero1_arti} | {ctx.options.t2_hero1_hp} hp | {ctx.options.t2_hero1_spd_set_other} \n {ctx.options.t2_hero2} | {ctx.options.t2_hero2_arti} | {ctx.options.t2_hero2_hp} hp | {ctx.options.t2_hero2_spd_set_other} \n {ctx.options.t2_hero3} | {ctx.options.t2_hero3_arti} | {ctx.options.t2_hero3_hp} hp | {ctx.options.t2_hero3_spd_set_other} ')
+
+    )
+    await ctx.respond(embed)
 
 # match up of the day
 @my_group.child
